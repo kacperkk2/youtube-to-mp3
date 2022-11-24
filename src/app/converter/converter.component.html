@@ -1,0 +1,15 @@
+<mat-form-field>
+    <mat-label> Youtube link </mat-label>
+    <input matInput [(ngModel)]="url" autocomplete="off">
+</mat-form-field>
+
+<button mat-raised-button (click)="initServerDownload()"> get </button>
+
+<button mat-raised-button (click)="getSongsStatus()"> refresh </button>
+
+<mat-list #songsList >
+    <mat-card *ngFor="let song of songs" (click)="downloadSong(song.name)">
+        <div> {{song.name}} </div> 
+        <div> {{song.status}} </div> 
+    </mat-card>
+</mat-list>
