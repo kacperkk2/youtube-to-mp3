@@ -99,7 +99,7 @@ export class ConverterComponent implements OnInit {
       console.log(data)
       const contentDisposition = data.headers.get('Content-Disposition')!;
       var filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
-      const blob = new Blob([data.body!], { type: 'application/mp3' });
+      const blob = new Blob([data.body!], { type: 'audio/mpeg' });
       const url= window.URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.download = filename;
