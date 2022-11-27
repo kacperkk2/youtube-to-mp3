@@ -1,15 +1,56 @@
-<mat-form-field>
-    <mat-label> Youtube link </mat-label>
-    <input matInput [(ngModel)]="url" autocomplete="off">
-</mat-form-field>
+<div fxLayout="row" fxLayoutAlign="center center">
+    <div class="wrapper">
+        <div fxLayout="row" fxLayoutAlign="start center">
+            <mat-form-field fxFlex="85" appearance="outline" style="padding-top: 22px">
+                <input [disabled]="downloadStatus != downloadStatuses.NO" class="link-input" matInput [(ngModel)]="url" autocomplete="off" 
+                placeholder="Youtube song or playlist link">
+            </mat-form-field>
+            <button class="init-button" *ngIf="downloadStatus == downloadStatuses.NO" fxFlex="15" mat-raised-button (click)="initServerDownload()">
+                <mat-icon class="init-icon absolute-icon" fxFlexFill fxLayoutAlign="center center" fontIcon="play_arrow"></mat-icon>
+            </button>
+            <button class="init-button" *ngIf="downloadStatus == downloadStatuses.PRE" fxFlex="15" mat-raised-button>
+                <mat-spinner class="init-spinner" [diameter]="28"></mat-spinner>
+            </button>
+            <button class="init-button" *ngIf="downloadStatus == downloadStatuses.ONGOING" fxFlex="15" mat-raised-button (click)="stopDownload()">
+                <mat-icon class="init-icon absolute-icon" fxFlexFill fxLayoutAlign="center center" fontIcon="stop"></mat-icon> 
+            </button>
+        </div>
+            
+        <div class="status-message" fxLayout="row" fxLayoutAlign="center center"> {{message}} </div>
 
-<button mat-raised-button (click)="initServerDownload()"> get </button>
+        <mat-list #songsList >
+            <mat-card *ngFor="let song of songs">
+                <div fxLayout="row" fxLayoutAlign="start center">
+                    <button mat-icon-button class="delete-icon" *ngIf="song.status=='ready'" (click)="deleteSong(song.name)">
+                        <mat-icon class="absolute-icon" fontIcon="close"></mat-icon>
+                    </button>
+    
+                    <div class="song-name"> {{song.name}} </div> 
+                </div>
 
-<button mat-raised-button (click)="getSongsStatus()"> refresh </button>
+                <button mat-icon-button class="download-icon" *ngIf="song.status=='ready'" (click)="downloadSong(song.name)">
+                    <mat-icon class="absolute-icon" fontIcon="save_alt"></mat-icon>
+                </button>
 
-<mat-list #songsList >
-    <mat-card *ngFor="let song of songs" (click)="downloadSong(song.name)">
-        <div> {{song.name}} </div> 
-        <div> {{song.status}} </div> 
-    </mat-card>
-</mat-list>
+                <span class="progress" *ngIf="song.status!='ready'" [style.width]="song.status+'%'"></span>
+                <div class="song-status" *ngIf="song.status!='ready'"> {{song.status}}% </div>
+            </mat-card>
+        </mat-list>
+
+        <div class="bulk-holder" fxLayout="row" fxLayoutAlign="space-between center">
+            <button fxFlex="50" class="bulk-button delete" mat-raised-button (click)="deleteAll()">
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <mat-icon class="bulk-icon" fontIcon="close"></mat-icon>
+                    <div> Delete all </div>
+                </div>
+            </button>
+
+            <button fxFlex="50" class="bulk-button download" mat-raised-button (click)="downloadAll()">
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <div> Download all </div>
+                    <mat-icon class="bulk-icon" fontIcon="save_alt"></mat-icon>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>

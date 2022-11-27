@@ -1,4 +1,168 @@
 mat-card{
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    position:relative; 
+    z-index: 0;
+    padding: 0;
+    background-color: #363636;
+    color: #F5F5F5
+}
+
+button:disabled {
+    background-color: #ac362e !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+    color: white;
+    border-bottom-left-radius: 50px!important;
+    border-top-left-radius: 50px !important;
+}
+
+::ng-deep .mat-form-field-outline-start {
+    border-radius: 28px 0 0 28px !important;
+    min-width: 28px !important;
+}
+
+.link-input {
+    margin-left: 10px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    background-color: #363636;
+    border-bottom-left-radius: 50px!important;
+    border-top-left-radius: 50px !important;
+}
+
+.mat-form-field {
+    color: #F5F5F5;
+}
+
+input::placeholder {
+    color: #A9A9A9;
+}
+
+.wrapper {
+    padding-left: 25px;
+    padding-right: 25px;
+    width: 625px;
+}
+
+.progress {
+    position: absolute; 
+    background-color: #ac362e; 
+    top: 0px; 
+    left: 0; 
+    width: 100%; 
+    height:100%; 
+    z-index: -1; 
+    border-radius: 5px;
+}
+
+.absolute-icon {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.mat-icon {
+    height:25px !important;
+    width:25px !important;
+    font-size:25px !important;
+    color: #F5F5F5;
+}
+
+.download-icon {
+    margin-right: 10px;
+    background-color: #ac362e;
+}
+
+.delete-icon {
+    margin-left: 10px;
+    background-color: #262626;
+}
+
+.mat-icon-button {
+    padding: 0;
+    height:35px !important;
+    width:35px !important;
+    position: relative;
+}
+
+.song-status {
+    margin-right: 10px;
+}
+
+.song-name {
+    padding: 15px;
+}
+
+.init-button {
+    border-bottom-right-radius: 50px;
+    border-top-right-radius: 50px;
+    height: 58px;
+    background-color: #ac362e;
+    color: #F5F5F5
+}
+
+.init-icon {
+    // width: 100px;
+    // height: 100px;
+    padding-bottom: 5px;
+    padding-right: 15px;
+    font-size: 30px !important;
+}
+
+.init-spinner::ng-deep circle{
+    stroke: #F5F5F5 !important;
+}
+
+.init-spinner {
+    margin-left: 13px; 
+    margin-top:5px
+}
+
+mat-list {
+    overflow: auto;
+    max-height: 400px;
+}
+
+.bulk-button {
+    height: 58px;
+    color: #F5F5F5;
+}
+
+.bulk-holder {
+    margin-top: 30px;
+}
+
+.delete {
+    background-color: #363636;
+    border-bottom-left-radius: 50px!important;
+    border-top-left-radius: 50px!important;
+}
+
+.download {
+    background-color: #ac362e;
+    border-bottom-right-radius: 50px!important;
+    border-top-right-radius: 50px!important;
+}
+
+.aligned-with-icon{
+    position: absolute;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.bulk-icon {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.status-message {
+    margin-bottom: 15px;
+    height: 10px;
+    color: #c3352e;
 }
