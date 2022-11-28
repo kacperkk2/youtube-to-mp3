@@ -17,11 +17,11 @@ export class ClientService {
   }
 
   initDownload(url: string) {
-    return this.httpClient.post<string>(this.CONVERTER_URL + "/init?url=" + url, null);
+    return this.httpClient.post<string>(this.CONVERTER_URL + "/download?url=" + url, null);
   }
   
   stopDownload() {
-    return this.httpClient.delete<string>(this.CONVERTER_URL + "/stop");
+    return this.httpClient.delete<string>(this.CONVERTER_URL + "/download");
   }
 
   downloadSong(songName: string) {
@@ -35,9 +35,14 @@ export class ClientService {
   deleteAllSongs() {
     return this.httpClient.delete<string>(this.CONVERTER_URL + "/songs?ext=.mp3");
   }
+
+  deleteSong(songName: string) {
+    return this.httpClient.delete<string>(this.CONVERTER_URL + "/songs/" + songName);
+  }
 }
 
 export interface SongDto {
   name: string;
   status: string;
+  size: string;
 }

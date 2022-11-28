@@ -115,7 +115,7 @@ input::placeholder {
     font-size: 30px !important;
 }
 
-.init-spinner::ng-deep circle{
+.spinner::ng-deep circle{
     stroke: #F5F5F5 !important;
 }
 
@@ -124,9 +124,27 @@ input::placeholder {
     margin-top:5px
 }
 
+.download-spinner {
+    margin-left: 7px; 
+    // margin-top:5px
+}
+
 mat-list {
     overflow: auto;
     max-height: 400px;
+}
+
+.empty-icon {
+    height: 100px !important;
+    width: 100px !important;
+    color: #A9A9A9;
+    font-size: 90px !important;
+}
+
+.empty-text {
+    color: #A9A9A9;
+    margin-top: 10px;
+    font-size: 30px !important;
 }
 
 .bulk-button {

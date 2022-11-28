@@ -16,6 +16,8 @@ export class ConverterComponent implements OnInit {
   message: string = "";
   messageTime: number = 3000;
   refreshTime: number = 3000;
+  bulkDownloadInProgress: boolean = false;
+  singleSongDownloadInProgress: string = "";
 
   constructor(private client: ClientService) { }
 
@@ -68,7 +70,7 @@ export class ConverterComponent implements OnInit {
     this.client.initDownload(this.url).subscribe(result => {
       this.downloadStatus = DOWNLOAD_STATUS.ONGOING;
       this.url = "";
-      console.log("download initiated");
+      this.getSongsStatus();
     });
   }
 
@@ -85,18 +87,16 @@ export class ConverterComponent implements OnInit {
   }
 
   stopDownload() {
-    // po poprawieniu response dac pre na czas uzyskania result
+    this.downloadStatus = DOWNLOAD_STATUS.PRE;
     this.client.stopDownload().subscribe(result => {
+      this.getSongsStatus();
       this.downloadStatus = DOWNLOAD_STATUS.NO;
-      console.log("stopped");
     });
   }
 
   downloadSong(songName: string) {
-    console.log(songName)
-
+    this.singleSongDownloadInProgress = songName;
     this.client.downloadSong(songName).subscribe(data => {
-      console.log(data)
       const contentDisposition = data.headers.get('Content-Disposition')!;
       var filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
       const blob = new Blob([data.body!], { type: 'audio/mpeg' });
@@ -105,6 +105,7 @@ export class ConverterComponent implements OnInit {
       anchor.download = filename;
       anchor.href = url;
       anchor.click();
+      this.singleSongDownloadInProgress = "";
 
       // let blob = new Blob([data], { type: "application/mp3"});
       // let url = window.URL.createObjectURL(blob);
@@ -115,18 +116,22 @@ export class ConverterComponent implements OnInit {
     });
   }
 
-  downloadAll() {
-    this.client.downloadAllSongs().subscribe(data => {
-// jakis zip?
+  // const anchor = document.createElement("a");
+  // anchor.download = "a.zip";
+  // anchor.href = "https://yt-to-mp3-production.up.railway.app/converter/songs";
+  // anchor.click();
 
-      // const contentDisposition = data.headers.get('Content-Disposition')!;
-      // var filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
-      // const blob = new Blob([data.body!], { type: 'application/mp3' });
-      // const url= window.URL.createObjectURL(blob);
-      // const anchor = document.createElement("a");
-      // anchor.download = filename;
-      // anchor.href = url;
-      // anchor.click();
+  downloadAll() {
+    this.bulkDownloadInProgress = true;
+    this.client.downloadAllSongs().subscribe(data => {
+      var filename = "youtube-to-mp3.zip";
+      const blob = new Blob([data.body!], { type: 'application/zip' });
+      const url= window.URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.download = filename;
+      anchor.href = url;
+      anchor.click();
+      this.bulkDownloadInProgress = false;
 
       // let blob = new Blob([data], { type: "application/mp3"});
       // let url = window.URL.createObjectURL(blob);
@@ -144,6 +149,9 @@ export class ConverterComponent implements OnInit {
   }
 
   deleteSong(songName: string) {
+    this.client.deleteSong(songName).subscribe(result => {
+      this.getSongsStatus();
+    });
   }
 }
 

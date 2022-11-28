@@ -9,7 +9,7 @@
                 <mat-icon class="init-icon absolute-icon" fxFlexFill fxLayoutAlign="center center" fontIcon="play_arrow"></mat-icon>
             </button>
             <button class="init-button" *ngIf="downloadStatus == downloadStatuses.PRE" fxFlex="15" mat-raised-button>
-                <mat-spinner class="init-spinner" [diameter]="28"></mat-spinner>
+                <mat-spinner class="init-spinner spinner" [diameter]="28"></mat-spinner>
             </button>
             <button class="init-button" *ngIf="downloadStatus == downloadStatuses.ONGOING" fxFlex="15" mat-raised-button (click)="stopDownload()">
                 <mat-icon class="init-icon absolute-icon" fxFlexFill fxLayoutAlign="center center" fontIcon="stop"></mat-icon> 
@@ -18,18 +18,25 @@
             
         <div class="status-message" fxLayout="row" fxLayoutAlign="center center"> {{message}} </div>
 
-        <mat-list #songsList >
+        <div *ngIf="songs.length == 0" fxLayout="column" fxLayoutAlign="center center">
+            <mat-icon class="empty-icon" fontIcon="folder_off"></mat-icon>
+            <div class="empty-text"> No files... </div>
+        </div>
+        <mat-list #songsList>
             <mat-card *ngFor="let song of songs">
                 <div fxLayout="row" fxLayoutAlign="start center">
                     <button mat-icon-button class="delete-icon" *ngIf="song.status=='ready'" (click)="deleteSong(song.name)">
                         <mat-icon class="absolute-icon" fontIcon="close"></mat-icon>
                     </button>
-    
                     <div class="song-name"> {{song.name}} </div> 
+                    <div style="font-size: 13px;"> {{song.size}} </div>
                 </div>
 
-                <button mat-icon-button class="download-icon" *ngIf="song.status=='ready'" (click)="downloadSong(song.name)">
+                <button mat-icon-button class="download-icon" *ngIf="song.status=='ready' && song.name!=singleSongDownloadInProgress" (click)="downloadSong(song.name)">
                     <mat-icon class="absolute-icon" fontIcon="save_alt"></mat-icon>
+                </button>
+                <button mat-icon-button class="download-icon" *ngIf="song.name==singleSongDownloadInProgress">
+                    <mat-spinner class="download-spinner spinner" [diameter]="20"></mat-spinner>
                 </button>
 
                 <span class="progress" *ngIf="song.status!='ready'" [style.width]="song.status+'%'"></span>
@@ -37,7 +44,7 @@
             </mat-card>
         </mat-list>
 
-        <div class="bulk-holder" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="bulk-holder" *ngIf="showBulkButtons" fxLayout="row" fxLayoutAlign="space-between center">
             <button fxFlex="50" class="bulk-button delete" mat-raised-button (click)="deleteAll()">
                 <div fxLayout="row" fxLayoutAlign="center center">
                     <mat-icon class="bulk-icon" fontIcon="close"></mat-icon>
@@ -45,10 +52,16 @@
                 </div>
             </button>
 
-            <button fxFlex="50" class="bulk-button download" mat-raised-button (click)="downloadAll()">
+            <button fxFlex="50" *ngIf="!bulkDownloadInProgress" class="bulk-button download" mat-raised-button (click)="downloadAll()">
                 <div fxLayout="row" fxLayoutAlign="center center">
                     <div> Download all </div>
                     <mat-icon class="bulk-icon" fontIcon="save_alt"></mat-icon>
+                </div>
+            </button>
+            <button fxFlex="50" *ngIf="bulkDownloadInProgress" class="bulk-button download" mat-raised-button>
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <div> Downloading zip... </div>
+                    <mat-spinner class="init-spinner spinner" [diameter]="28"></mat-spinner>
                 </div>
             </button>
         </div>
