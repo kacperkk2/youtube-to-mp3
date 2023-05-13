@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ConverterComponent } from './converter/converter.component';
+import { ConverterComponent } from './components/converter/converter.component';
 import { HttpClientModule } from '@angular/common/http';
 
 import {MatFormFieldModule, } from '@angular/material/form-field';
@@ -44,6 +44,6 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
   bootstrap: [AppComponent]
 })
 export class AppModule { 
-  public static URL: string = "https://yt-to-mp3-production.up.railway.app/converter";
-  // public static URL: string = "http://localhost:8080/converter";
+  // public static URL: string = "https://yt-to-mp3-production.up.railway.app/converter";
+  public static URL: string = "http://localhost:8080/converter";
 }

@@ -13,7 +13,7 @@ export class ClientService {
   }
 
   getStatus() {
-    return this.httpClient.get<SongDto[]>(this.CONVERTER_URL + "/status");
+    return this.httpClient.get<StatusDto>(this.CONVERTER_URL + "/status");
   }
 
   initDownload(url: string) {
@@ -45,4 +45,9 @@ export interface SongDto {
   name: string;
   status: string;
   size: string;
+}
+
+export interface StatusDto {
+  downloadOngoing: boolean;
+  songs: SongDto[];
 }

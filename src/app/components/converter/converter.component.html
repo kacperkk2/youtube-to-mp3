@@ -2,16 +2,17 @@
     <div class="wrapper">
         <div fxLayout="row" fxLayoutAlign="start center">
             <mat-form-field fxFlex="85" appearance="outline" style="padding-top: 22px">
-                <input [disabled]="downloadStatus != downloadStatuses.NO" class="link-input" matInput [(ngModel)]="url" autocomplete="off" 
+                <input [disabled]="isDownloadOngoing || isInititing || isLoadingFirstTime" 
+                class="link-input" matInput [(ngModel)]="url" autocomplete="off" 
                 placeholder="Youtube song or playlist link">
             </mat-form-field>
-            <button class="init-button" *ngIf="downloadStatus == downloadStatuses.NO" fxFlex="15" mat-raised-button (click)="initServerDownload()">
+            <button class="init-button" *ngIf="!isDownloadOngoing && !isInititing" fxFlex="15" mat-raised-button (click)="initServerDownload()">
                 <mat-icon class="init-icon absolute-icon" fxFlexFill fxLayoutAlign="center center" fontIcon="play_arrow"></mat-icon>
             </button>
-            <button class="init-button" *ngIf="downloadStatus == downloadStatuses.PRE" fxFlex="15" mat-raised-button>
+            <button class="init-button" *ngIf="isInititing" fxFlex="15" mat-raised-button>
                 <mat-spinner class="init-spinner spinner" [diameter]="28"></mat-spinner>
             </button>
-            <button class="init-button" *ngIf="downloadStatus == downloadStatuses.ONGOING" fxFlex="15" mat-raised-button (click)="stopDownload()">
+            <button class="init-button" *ngIf="isDownloadOngoing && !isInititing" fxFlex="15" mat-raised-button (click)="stopDownload()">
                 <mat-icon class="init-icon absolute-icon" fxFlexFill fxLayoutAlign="center center" fontIcon="stop"></mat-icon> 
             </button>
         </div>
@@ -19,8 +20,13 @@
         <div class="status-message" fxLayout="row" fxLayoutAlign="center center"> {{message}} </div>
 
         <div *ngIf="songs.length == 0" fxLayout="column" fxLayoutAlign="center center">
-            <mat-icon class="empty-icon" fontIcon="folder_off"></mat-icon>
-            <div class="empty-text"> No files... </div>
+            <div *ngIf="isLoadingFirstTime">
+                <mat-spinner class="spinner" [diameter]="125"></mat-spinner>
+            </div>
+            <div *ngIf="!isLoadingFirstTime">
+                <mat-icon class="empty-icon" fontIcon="folder_off"></mat-icon>
+                <div class="empty-text"> No files... </div>
+            </div>
         </div>
         <mat-list #songsList>
             <mat-card *ngFor="let song of songs">
@@ -44,7 +50,7 @@
             </mat-card>
         </mat-list>
 
-        <div class="bulk-holder" *ngIf="showBulkButtons" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="bulk-holder" *ngIf="songs.length > 2" fxLayout="row" fxLayoutAlign="space-between center">
             <button fxFlex="50" class="bulk-button delete" mat-raised-button (click)="deleteAll()">
                 <div fxLayout="row" fxLayoutAlign="center center">
                     <mat-icon class="bulk-icon" fontIcon="close"></mat-icon>

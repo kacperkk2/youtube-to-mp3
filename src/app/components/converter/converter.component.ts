@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ClientService, SongDto } from '../services/client.service';
+import { ClientService, SongDto } from '../../services/client.service';
 
 @Component({
   selector: 'app-converter',
@@ -7,12 +7,12 @@ import { ClientService, SongDto } from '../services/client.service';
   styleUrls: ['./converter.component.scss']
 })
 export class ConverterComponent implements OnInit {
+  isLoadingFirstTime: boolean = true;
+  isDownloadOngoing: boolean = false;
+  isInititing: boolean = false;
 
   songs: SongDto[] = [];
   url: string = "";
-  downloadStatus: DOWNLOAD_STATUS = DOWNLOAD_STATUS.NO;
-  downloadStatuses = DOWNLOAD_STATUS;
-  showBulkButtons: boolean = false;
   message: string = "";
   messageTime: number = 3000;
   refreshTime: number = 3000;
@@ -45,20 +45,13 @@ export class ConverterComponent implements OnInit {
   }
 
   getSongsStatus() {
-    this.client.getStatus().subscribe(songs => {
-      if (songs.filter(song => song.status != 'ready').length > 0) {
-        this.downloadStatus = DOWNLOAD_STATUS.ONGOING;
+    this.client.getStatus().subscribe(status => {
+      if (this.isDownloadOngoing == true && status.downloadOngoing == false) {
+        this.showMessage("Download finished");
       }
-      else if (this.downloadStatus != DOWNLOAD_STATUS.PRE) {
-        this.downloadStatus = DOWNLOAD_STATUS.NO;
-      }
-      if (songs.filter(song => !song.name.endsWith("part")).length > 1) {
-        this.showBulkButtons = true;
-      }
-      else {
-        this.showBulkButtons = false;
-      }
-      this.songs = songs;
+      this.isDownloadOngoing = status.downloadOngoing;
+      this.songs = status.songs;
+      this.isLoadingFirstTime = false;
     });
   }
 
@@ -66,16 +59,17 @@ export class ConverterComponent implements OnInit {
     if (!this.isLinkValid()) {
       return;
     }
-    this.downloadStatus = DOWNLOAD_STATUS.PRE;
+    this.showMessage("Initializing download...");
+    this.isInititing = true;
     this.client.initDownload(this.url).subscribe(result => {
-      this.downloadStatus = DOWNLOAD_STATUS.ONGOING;
+      this.isInititing = false;
       this.url = "";
       this.getSongsStatus();
     });
   }
 
   isLinkValid() {
-    if (this.url.trim() == "") {
+    if (this.url.trim() == "" || this.url.indexOf("youtube") < 0) {
       this.showMessage("Please provide youtube link");
       return false;
     }
@@ -87,10 +81,11 @@ export class ConverterComponent implements OnInit {
   }
 
   stopDownload() {
-    this.downloadStatus = DOWNLOAD_STATUS.PRE;
+    this.showMessage("Stopping download...");
+    this.isInititing = true;
     this.client.stopDownload().subscribe(result => {
+      this.isInititing = false;
       this.getSongsStatus();
-      this.downloadStatus = DOWNLOAD_STATUS.NO;
     });
   }
 
@@ -153,8 +148,4 @@ export class ConverterComponent implements OnInit {
       this.getSongsStatus();
     });
   }
-}
-
-export enum DOWNLOAD_STATUS {
-  NO, PRE, ONGOING
 }
