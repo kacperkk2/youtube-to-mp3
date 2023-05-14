@@ -10,7 +10,7 @@
                 <mat-icon class="init-icon absolute-icon" fxFlexFill fxLayoutAlign="center center" fontIcon="play_arrow"></mat-icon>
             </button>
             <button class="init-button" *ngIf="isInititing" fxFlex="15" mat-raised-button>
-                <mat-spinner class="init-spinner spinner" [diameter]="28"></mat-spinner>
+                <mat-spinner class="init-spinner absolute-icon spinner" [diameter]="28"></mat-spinner>
             </button>
             <button class="init-button" *ngIf="isDownloadOngoing && !isInititing" fxFlex="15" mat-raised-button (click)="stopDownload()">
                 <mat-icon class="init-icon absolute-icon" fxFlexFill fxLayoutAlign="center center" fontIcon="stop"></mat-icon> 

@@ -45,13 +45,19 @@ export class ConverterComponent implements OnInit {
   }
 
   getSongsStatus() {
-    this.client.getStatus().subscribe(status => {
-      if (this.isDownloadOngoing == true && status.downloadOngoing == false) {
-        this.showMessage("Download finished");
+    this.client.getStatus().subscribe({
+      next: (status) => {
+        if (this.isDownloadOngoing == true && status.downloadOngoing == false) {
+          this.showMessage("Download finished");
+        }
+        this.isDownloadOngoing = status.downloadOngoing;
+        this.songs = status.songs;
+        this.isLoadingFirstTime = false;
+      },
+      error: (error) => {
+        this.isLoadingFirstTime = false;
+        this.showMessage(error);
       }
-      this.isDownloadOngoing = status.downloadOngoing;
-      this.songs = status.songs;
-      this.isLoadingFirstTime = false;
     });
   }
 
