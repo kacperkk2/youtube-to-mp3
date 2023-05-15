@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClientService, SongDto } from '../../services/client.service';
 
 @Component({
@@ -12,6 +13,8 @@ export class ConverterComponent implements OnInit {
   isInititing: boolean = false;
 
   songs: SongDto[] = [];
+  totalSizeNumber: number = 0;
+  totalSizeUnit: string = "";
   url: string = "";
   message: string = "";
   messageTime: number = 3000;
@@ -19,7 +22,7 @@ export class ConverterComponent implements OnInit {
   bulkDownloadInProgress: boolean = false;
   singleSongDownloadInProgress: string = "";
 
-  constructor(private client: ClientService) { }
+  constructor(private client: ClientService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getSongsStatus();
@@ -44,14 +47,23 @@ export class ConverterComponent implements OnInit {
     this.refresh();
   }
 
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Close', {
+      verticalPosition: 'top',
+    });
+  }
+
   getSongsStatus() {
     this.client.getStatus().subscribe({
       next: (status) => {
         if (this.isDownloadOngoing == true && status.downloadOngoing == false) {
           this.showMessage("Download finished");
+          this.openSnackBar("Download finished")
         }
         this.isDownloadOngoing = status.downloadOngoing;
         this.songs = status.songs;
+        this.totalSizeNumber = status.totalSizeNumber;
+        this.totalSizeUnit = status.totalSizeUnit;
         this.isLoadingFirstTime = false;
       },
       error: (error) => {
@@ -71,6 +83,7 @@ export class ConverterComponent implements OnInit {
       this.isInititing = false;
       this.url = "";
       this.getSongsStatus();
+      this.showMessage("Download started");
     });
   }
 
@@ -146,12 +159,14 @@ export class ConverterComponent implements OnInit {
   deleteAll() {
     this.client.deleteAllSongs().subscribe(result => {
       this.getSongsStatus();
+      this.showMessage('All songs deleted')
     });
   }
 
   deleteSong(songName: string) {
     this.client.deleteSong(songName).subscribe(result => {
       this.getSongsStatus();
+      this.showMessage('Song deleted: ' + songName)
     });
   }
 }

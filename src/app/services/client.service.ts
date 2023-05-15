@@ -44,10 +44,13 @@ export class ClientService {
 export interface SongDto {
   name: string;
   status: string;
-  size: string;
+  sizeNumber: number;
+  sizeUnit: string;
 }
 
 export interface StatusDto {
   downloadOngoing: boolean;
+  totalSizeNumber: number;
+  totalSizeUnit: string;
   songs: SongDto[];
 }

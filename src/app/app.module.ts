@@ -17,6 +17,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon'
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 
 
 @NgModule({
@@ -38,12 +40,13 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     FlexLayoutModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
-  public static URL: string = "https://yt-to-mp3-production.up.railway.app/converter";
-  // public static URL: string = "http://localhost:8080/converter";
+  // public static URL: string = "https://yt-to-mp3-production.up.railway.app/converter";
+  public static URL: string = "http://localhost:8080/converter";
 }

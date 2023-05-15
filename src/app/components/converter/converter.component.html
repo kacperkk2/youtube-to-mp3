@@ -9,8 +9,8 @@
             <button class="init-button" *ngIf="!isDownloadOngoing && !isInititing" fxFlex="15" mat-raised-button (click)="initServerDownload()">
                 <mat-icon class="init-icon absolute-icon" fxFlexFill fxLayoutAlign="center center" fontIcon="play_arrow"></mat-icon>
             </button>
-            <button class="init-button" *ngIf="isInititing" fxFlex="15" mat-raised-button>
-                <mat-spinner class="init-spinner absolute-icon spinner" [diameter]="28"></mat-spinner>
+            <button class="init-button" *ngIf="isInititing" fxFlex="15" fxLayout="column" fxLayoutAlign="center center" mat-raised-button>
+                <mat-spinner class="init-spinner spinner" [diameter]="28"></mat-spinner>
             </button>
             <button class="init-button" *ngIf="isDownloadOngoing && !isInititing" fxFlex="15" mat-raised-button (click)="stopDownload()">
                 <mat-icon class="init-icon absolute-icon" fxFlexFill fxLayoutAlign="center center" fontIcon="stop"></mat-icon> 
@@ -23,7 +23,7 @@
             <div *ngIf="isLoadingFirstTime">
                 <mat-spinner class="spinner" [diameter]="125"></mat-spinner>
             </div>
-            <div *ngIf="!isLoadingFirstTime">
+            <div *ngIf="!isLoadingFirstTime" fxLayout="column" fxLayoutAlign="center center">
                 <mat-icon class="empty-icon" fontIcon="folder_off"></mat-icon>
                 <div class="empty-text"> No files... </div>
             </div>
@@ -35,7 +35,7 @@
                         <mat-icon class="absolute-icon" fontIcon="close"></mat-icon>
                     </button>
                     <div class="song-name"> {{song.name}} </div> 
-                    <div style="font-size: 13px;"> {{song.size}} </div>
+                    <div style="font-size: 13px;"> {{song.sizeNumber | number:'1.0-1'}} {{song.sizeUnit}} </div>
                 </div>
 
                 <button mat-icon-button class="download-icon" *ngIf="song.status=='ready' && song.name!=singleSongDownloadInProgress" (click)="downloadSong(song.name)">
@@ -54,13 +54,13 @@
             <button fxFlex="50" class="bulk-button delete" mat-raised-button (click)="deleteAll()">
                 <div fxLayout="row" fxLayoutAlign="center center">
                     <mat-icon class="bulk-icon" fontIcon="close"></mat-icon>
-                    <div> Delete all </div>
+                    <div> Delete all ({{songs.length}} songs) </div>
                 </div>
             </button>
 
             <button fxFlex="50" *ngIf="!bulkDownloadInProgress" class="bulk-button download" mat-raised-button (click)="downloadAll()">
                 <div fxLayout="row" fxLayoutAlign="center center">
-                    <div> Download all </div>
+                    <div> Download all (~{{totalSizeNumber | number:'1.0-1'}} {{totalSizeUnit}})</div>
                     <mat-icon class="bulk-icon" fontIcon="save_alt"></mat-icon>
                 </div>
             </button>
