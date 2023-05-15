@@ -19,6 +19,10 @@ export class ClientService {
   initDownload(url: string) {
     return this.httpClient.post<string>(this.CONVERTER_URL + "/download?url=" + url, null);
   }
+
+  cleanSongsNames() {
+    return this.httpClient.request('GET', this.CONVERTER_URL + "/songs/clean");
+  }
   
   stopDownload() {
     return this.httpClient.delete<string>(this.CONVERTER_URL + "/download");

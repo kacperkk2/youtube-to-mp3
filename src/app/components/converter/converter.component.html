@@ -29,13 +29,14 @@
             </div>
         </div>
         <mat-list #songsList>
-            <mat-card *ngFor="let song of songs">
-                <div fxLayout="row" fxLayoutAlign="start center">
-                    <button mat-icon-button class="delete-icon" *ngIf="song.status=='ready'" (click)="deleteSong(song.name)">
-                        <mat-icon class="absolute-icon" fontIcon="close"></mat-icon>
-                    </button>
-                    <div class="song-name"> {{song.name}} </div> 
-                    <div style="font-size: 13px;"> {{song.sizeNumber | number:'1.0-1'}} {{song.sizeUnit}} </div>
+            <mat-card *ngFor="let song of songs" fxFlexFill fxLayout="row" fxLayoutAlign="space-between center">
+                <button mat-icon-button class="delete-icon" *ngIf="song.status=='ready'" (click)="deleteSong(song.name)">
+                    <mat-icon class="absolute-icon" fontIcon="close"></mat-icon>
+                </button>
+
+                <div fxLayout="row" fxFlex="90" fxLayoutAlign="space-between center">
+                    <div text-editable class="song-name"> {{song.name}} </div> 
+                    <div fxFlex="10" style="font-size: 13px;"> {{song.sizeNumber | number:'1.0-1'}} {{song.sizeUnit}} </div>
                 </div>
 
                 <button mat-icon-button class="download-icon" *ngIf="song.status=='ready' && song.name!=singleSongDownloadInProgress" (click)="downloadSong(song.name)">

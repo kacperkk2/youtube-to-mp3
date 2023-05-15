@@ -57,6 +57,7 @@ export class ConverterComponent implements OnInit {
     this.client.getStatus().subscribe({
       next: (status) => {
         if (this.isDownloadOngoing == true && status.downloadOngoing == false) {
+          this.client.cleanSongsNames().subscribe();
           this.showMessage("Download finished");
           this.openSnackBar("Download finished")
         }
