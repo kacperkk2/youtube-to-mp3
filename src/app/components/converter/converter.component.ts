@@ -89,7 +89,7 @@ export class ConverterComponent implements OnInit {
   }
 
   isLinkValid() {
-    if (this.url.trim() == "" || this.url.indexOf("youtube") < 0) {
+    if (this.url.trim() == "") {
       this.showMessage("Please provide youtube link");
       return false;
     }
